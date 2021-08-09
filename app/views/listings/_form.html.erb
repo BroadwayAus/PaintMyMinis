@@ -1,0 +1,18 @@
+
+<%= simple_form_for(@listing) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.input :name %>
+    <%= f.input :description %>
+    <%= f.input :price %>
+    <%= f.input :available %>
+    <%= f.input :category, collection: ["Warhammer: 40,000", "Warhammer: Age of Sigma", "Dungeon and Dragons", "Call of Cthulhu", "Other"] %>
+    <%= f.file_field :picture %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: "btn btn-dark btn-md" %>
+  </div>
+<% end %>
