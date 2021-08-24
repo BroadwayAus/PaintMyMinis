@@ -16,7 +16,7 @@
  @import "bootstrap";
 
  body{
-     background-image: url(tiny-squares.png);
+     background-image: url(gridme.png);
  }
 
  .home_img{
@@ -37,4 +37,9 @@
 
  .menu_description{
      min-height: 50px;
+ }
+
+ .item_img{
+     width: 60%;
+     height: 60%;
  }

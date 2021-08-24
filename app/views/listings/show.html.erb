@@ -1,38 +1,66 @@
 <p id="notice"><%= notice %></p>
+<div class="jumbotron">
+  <div class="row">
+    <div class="col-md-6">
+    <p>
+      <%= image_tag @listing&.picture, class: "item_img" %> 
+    </p>
+    </div>
+      <div class="col-md-6">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <p>
+              <strong>Name:</strong>
+              <%= @listing.name %>
+            </p>
+            <p>
+              <strong>Description:</strong>
+              <%= @listing.description %>
+            </p>
+            <p>
+              <strong>Price:</strong>
+              <%= @listing.price %>
+            </p>
+            <p>
+              <strong>Available:</strong>
+              <%= @listing.available %>
+            </p>
+            <p>
+              <strong>User:</strong>
+              <%= @listing.user.username %>
+            </p>
+            <p>
+              <strong>Category:</strong>
+              <%= @listing.category %>
+            </p>
+          </div>
+        </div>
+    </div>
+  </div>
 
-<p>
-  <strong>Name:</strong>
-  <%= @listing.name %>
-</p>
+  <% if current_user && @listing.available == true %>
+    <button data-stripe="payment" class="btn btn-primary p-3">Buy: $<%= @listing.price %></button>
+  <% elsif @listing.available == false %>
+    <button class="btn btn-secondary" disabled>SOLD</button>
+  <% else %>
+    <%= button_to "Login to buy", new_user_session_path, class: "btn btn-info" %>
+  <% end %>
+</div>
 
-<p>
-  <strong>Description:</strong>
-  <%= @listing.description %>
-</p>
-
-<p>
-  <strong>Price:</strong>
-  <%= @listing.price %>
-</p>
-
-<p>
-  <strong>Available:</strong>
-  <%= @listing.available %>
-</p>
-
-<p>
-  <strong>User:</strong>
-  <%= @listing.user.email %>
-</p>
-
-<p>
-  <strong>Category:</strong>
-  <%= @listing.category %>
-</p>
-
-<p>
-  <%= image_tag @listing.picture %>>
-</p>
-
+<% if current_user == @listing.user %>
 <%= link_to 'Edit', edit_listing_path(@listing) %> |
-<%= link_to 'Back', listings_path %>
+<% end %>
+<%= link_to 'Back', item_page_path %>
+
+<script src="https://js.stripe.com/v3"></script>
+<script>
+  document.querySelector("[data-stripe='payment']").addEventListener("click", () => {
+    const stripe = Stripe(
+    "<%= Rails.application.credentials.dig(:stripe, :public_key) %>"
+    );
+    stripe.redirectToCheckout({
+      sessionId: "<%= @session_id %>"
+    });
+  });
+</script>
+
